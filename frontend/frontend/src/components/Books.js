@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 
 const Books = () => {
   const [books, setBooks] = useState([]);
@@ -18,7 +18,7 @@ const Books = () => {
   const fetchBooks = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://localhost:5000/api/books', {
+      const response = await API.get('/api/books', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setBooks(response.data);
@@ -30,19 +30,22 @@ const Books = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
+
     try {
       if (editing) {
-        await axios.put(`http://localhost:5000/api/books/${currentBookId}`, formData, {
+        await API.put(`/api/books/${currentBookId}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('http://localhost:5000/api/books', formData, {
+        await API.post('/api/books', formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
+
       setFormData({ title: '', author: '', quantity: '' });
       setEditing(false);
       fetchBooks();
+
     } catch (error) {
       console.error('Error saving book:', error);
       alert(error.response?.data?.error || 'Error saving book');
@@ -62,8 +65,9 @@ const Books = () => {
   const handleDelete = async (bookId) => {
     if (window.confirm('Are you sure you want to delete this book?')) {
       const token = localStorage.getItem('token');
+
       try {
-        await axios.delete(`http://localhost:5000/api/books/${bookId}`, {
+        await API.delete(`/api/books/${bookId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         fetchBooks();
@@ -81,9 +85,10 @@ const Books = () => {
   return (
     <div className="books">
       <h1>Books Management</h1>
-      
+
       <div className="form-container">
         <h2>{editing ? 'Edit Book' : 'Add New Book'}</h2>
+
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -93,6 +98,7 @@ const Books = () => {
             onChange={handleChange}
             required
           />
+
           <input
             type="text"
             name="author"
@@ -101,6 +107,7 @@ const Books = () => {
             onChange={handleChange}
             required
           />
+
           <input
             type="number"
             name="quantity"
@@ -110,23 +117,25 @@ const Books = () => {
             required
             min="1"
           />
-          <button type="submit">{editing ? 'Update' : 'Add'} Book</button>
+
+          <button type="submit">
+            {editing ? 'Update' : 'Add'} Book
+          </button>
+
           {editing && (
             <button type="button" onClick={() => {
               setEditing(false);
               setFormData({ title: '', author: '', quantity: '' });
-            }}>Cancel</button>
+            }}>
+              Cancel
+            </button>
           )}
         </form>
-        {!editing && (
-          <div className="info-message">
-            <small>Book ID will be auto-generated (1, 2, 3...)</small>
-          </div>
-        )}
       </div>
 
       <div className="books-list">
         <h2>Books List</h2>
+
         {books.length === 0 ? (
           <p>No books found. Add your first book above.</p>
         ) : (
@@ -141,6 +150,7 @@ const Books = () => {
                 <th>Actions</th>
               </tr>
             </thead>
+
             <tbody>
               {books.map((book) => (
                 <tr key={book._id}>
@@ -156,6 +166,7 @@ const Books = () => {
                 </tr>
               ))}
             </tbody>
+
           </table>
         )}
       </div>
