@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
@@ -12,7 +12,6 @@ import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showLogin, setShowLogin] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -31,31 +30,22 @@ function App() {
     setIsAuthenticated(false);
   };
 
-  const handleSwitchToSignup = () => {
-    setShowLogin(false);
-  };
-
-  const handleSwitchToLogin = () => {
-    setShowLogin(true);
-  };
-
+  // If not authenticated, show login/signup routes
   if (!isAuthenticated) {
     return (
-      <div className="App">
-        {showLogin ? (
-          <Login 
-            onLogin={handleLogin} 
-            onSwitchToSignup={handleSwitchToSignup} 
-          />
-        ) : (
-          <Signup 
-            onSwitchToLogin={handleSwitchToLogin} 
-          />
-        )}
-      </div>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="*" element={<Navigate to="/login" />} />
+          </Routes>
+        </div>
+      </Router>
     );
   }
 
+  // If authenticated, show main app
   return (
     <Router>
       <div className="App">
@@ -67,6 +57,8 @@ function App() {
           <Route path="/borrow" element={<Borrow />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/" element={<Navigate to="/dashboard" />} />
+          <Route path="/login" element={<Navigate to="/dashboard" />} />
+          <Route path="/signup" element={<Navigate to="/dashboard" />} />
         </Routes>
       </div>
     </Router>
