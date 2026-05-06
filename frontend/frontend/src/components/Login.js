@@ -92,12 +92,6 @@ const Login = ({ onLogin }) => {
         </form>
 
         <div className="login-footer">
-          <div className="default-creds">
-            <p>🔐 Default Admin Credentials:</p>
-            <p><strong>Username:</strong> admin &nbsp;|&nbsp; <strong>Password:</strong> admin123</p>
-            <p><strong>Username:</strong> programmer &nbsp;|&nbsp; <strong>Password:</strong> admin123</p>
-          </div>
-          
           <div className="signup-link">
             <p>Don't have an account? <Link to="/signup">Create one here</Link></p>
           </div>
