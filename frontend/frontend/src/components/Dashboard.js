@@ -25,7 +25,8 @@ import {
     BarChart3,
     PieChart as PieChartIcon,
     LineChart,
-    RefreshCw
+    RefreshCw,
+    Library
 } from 'lucide-react';
 
 // Register ChartJS components
@@ -339,10 +340,10 @@ const Dashboard = () => {
         <div className="dashboard">
             <div className="dashboard-header">
                 <h1 className="dashboard-title">
-                    <BarChart3 className="title-icon" size={32} />
-                    AI-Powered Library Dashboard
+                    <Library className="title-icon" size={32} />
+                    Library Dashboard
                 </h1>
-                <p className="dashboard-subtitle">Real-time analytics & insights</p>
+                <p className="dashboard-subtitle">Overview & Analytics</p>
             </div>
             
             {/* Summary Cards */}
@@ -386,6 +387,7 @@ const Dashboard = () => {
                     </div>
                     <div className="chart-container">
                         <Line data={monthlyChartData} options={chartOptions} />
+                        </div>
                     </div>
                 </div>
 
