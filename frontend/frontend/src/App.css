@@ -1162,3 +1162,160 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
     font-size: 1rem;
   }
 }
+
+/* Dashboard Header */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-title {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366F1, #8B5CF6, #10B981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.title-icon {
+    font-size: 2rem;
+    background: none;
+    -webkit-text-fill-color: initial;
+}
+
+.dashboard-subtitle {
+    color: #6B7280;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* Summary Cards with Gradient */
+.summary-card {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.summary-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.summary-card:hover::after {
+    opacity: 1;
+}
+
+.summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.card-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    backdrop-filter: blur(10px);
+}
+
+.card-icon {
+    font-size: 2rem;
+}
+
+.card-content h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.card-value {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+}
+
+.card-subtitle {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Chart Cards */
+.chart-card {
+    background: white;
+    border-radius: 24px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.chart-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(99, 102, 241, 0.1);
+}
+
+.chart-header {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 2px solid #F3F4F6;
+    padding-bottom: 0.75rem;
+}
+
+.chart-icon {
+    font-size: 1.5rem;
+}
+
+.chart-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1F2937;
+    flex: 1;
+}
+
+.chart-subtitle {
+    margin: 0.25rem 0 0 0;
+    color: #9CA3AF;
+    font-size: 0.75rem;
+}
+
+/* Activities */
+.activity-item {
+    background: #F9FAFB;
+    border-radius: 16px;
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+    border-left: 3px solid #6366F1;
+}
+
+.activity-item:hover {
+    background: #EEF2FF;
+    transform: translateX(5px);
+}
