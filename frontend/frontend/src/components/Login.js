@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import API from '../api';
 
-const Login = ({ onLogin, onSwitchToSignup }) => {
+const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +24,7 @@ const Login = ({ onLogin, onSwitchToSignup }) => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('username', response.data.username);
         onLogin();
+        navigate('/dashboard');
       } else {
         setError('Invalid response from server');
       }
@@ -72,7 +75,7 @@ const Login = ({ onLogin, onSwitchToSignup }) => {
           <p><strong>Username:</strong> admin</p>
           <p><strong>Password:</strong> admin123</p>
           <hr />
-          <p>Don't have an account? <button className="link-button" onClick={onSwitchToSignup}>Sign up</button></p>
+          <p>Don't have an account? <Link to="/signup" className="link-button">Sign up here</Link></p>
         </div>
       </div>
     </div>
