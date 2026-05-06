@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './components/Login';
+import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
 import Books from './components/Books';
 import Students from './components/Students';
@@ -11,6 +12,7 @@ import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLogin, setShowLogin] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -29,30 +31,42 @@ function App() {
     setIsAuthenticated(false);
   };
 
+  const handleSwitchToSignup = () => {
+    setShowLogin(false);
+  };
+
+  const handleSwitchToLogin = () => {
+    setShowLogin(true);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="App">
+        {showLogin ? (
+          <Login 
+            onLogin={handleLogin} 
+            onSwitchToSignup={handleSwitchToSignup} 
+          />
+        ) : (
+          <Signup 
+            onSwitchToLogin={handleSwitchToLogin} 
+          />
+        )}
+      </div>
+    );
+  }
+
   return (
     <Router>
       <div className="App">
-        {isAuthenticated && <Navbar onLogout={handleLogout} />}
+        <Navbar onLogout={handleLogout} />
         <Routes>
-          <Route path="/login" element={
-            isAuthenticated ? <Navigate to="/dashboard" /> : <Login onLogin={handleLogin} />
-          } />
-          <Route path="/dashboard" element={
-            isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
-          } />
-          <Route path="/books" element={
-            isAuthenticated ? <Books /> : <Navigate to="/login" />
-          } />
-          <Route path="/students" element={
-            isAuthenticated ? <Students /> : <Navigate to="/login" />
-          } />
-          <Route path="/borrow" element={
-            isAuthenticated ? <Borrow /> : <Navigate to="/login" />
-          } />
-          <Route path="/reports" element={
-            isAuthenticated ? <Reports /> : <Navigate to="/login" />
-          } />
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/books" element={<Books />} />
+          <Route path="/students" element={<Students />} />
+          <Route path="/borrow" element={<Borrow />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/" element={<Navigate to="/dashboard" />} />
         </Routes>
       </div>
     </Router>
