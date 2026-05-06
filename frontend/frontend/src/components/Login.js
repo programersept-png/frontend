@@ -21,19 +21,31 @@ const Login = ({ onLogin }) => {
       });
 
       if (response.data.token) {
+        // Store token and user info
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('username', response.data.username);
-        onLogin();
+        localStorage.setItem('user_id', response.data.user_id);
+        localStorage.setItem('role', response.data.role);
+        
+        // Call the onLogin callback from App.js
+        if (onLogin) {
+          onLogin();
+        }
+        
+        // Navigate to dashboard
         navigate('/dashboard');
       } else {
         setError('Invalid response from server');
       }
 
     } catch (err) {
+      console.error('Login error:', err);
       if (err.response) {
-        setError(err.response.data.error || 'Login failed');
+        setError(err.response.data.error || 'Login failed. Please try again.');
+      } else if (err.request) {
+        setError('Cannot connect to server. Please check your connection.');
       } else {
-        setError('Cannot connect to server');
+        setError('An error occurred. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -43,39 +55,52 @@ const Login = ({ onLogin }) => {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>📚 Library Management System</h2>
-        <h3>Login to Continue</h3>
+        <div className="login-header">
+          <h2>📚 Library Management System</h2>
+          <h3>Welcome Back!</h3>
+        </div>
 
         {error && <div className="error">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+          <div className="form-group">
+            <label>Username</label>
+            <input
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              autoFocus
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-          <button type="submit" disabled={loading}>
+          <button type="submit" disabled={loading} className="login-btn">
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
-        <div className="info">
-          <p>🔐 Default credentials:</p>
-          <p><strong>Username:</strong> admin</p>
-          <p><strong>Password:</strong> admin123</p>
-          <hr />
-          <p>Don't have an account? <Link to="/signup" className="link-button">Sign up here</Link></p>
+        <div className="login-footer">
+          <div className="default-creds">
+            <p>🔐 Default Admin Credentials:</p>
+            <p><strong>Username:</strong> admin &nbsp;|&nbsp; <strong>Password:</strong> admin123</p>
+            <p><strong>Username:</strong> programmer &nbsp;|&nbsp; <strong>Password:</strong> admin123</p>
+          </div>
+          
+          <div className="signup-link">
+            <p>Don't have an account? <Link to="/signup">Create one here</Link></p>
+          </div>
         </div>
       </div>
     </div>
