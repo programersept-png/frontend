@@ -71,11 +71,9 @@ const Dashboard = () => {
             const currentBorrows = borrowRes.data;
             const allBorrows = allBorrowsRes.data;
 
-            // Calculate totals
             const totalBookCopies = books.reduce((sum, book) => sum + (book.quantity || 0), 0);
             const availableBooks = books.reduce((sum, book) => sum + (book.available_quantity || 0), 0);
 
-            // Books by Author
             const authorCount = {};
             books.forEach(book => {
                 authorCount[book.author] = (authorCount[book.author] || 0) + (book.quantity || 1);
@@ -85,7 +83,6 @@ const Dashboard = () => {
                 .slice(0, 5)
                 .map(([author, count]) => ({ author, count }));
 
-            // Monthly Borrowing (last 6 months)
             const monthlyData = {};
             const last6Months = [];
             for (let i = 5; i >= 0; i--) {
@@ -109,7 +106,6 @@ const Dashboard = () => {
                 count: monthlyData[month]
             }));
 
-            // Popular Books (most borrowed)
             const bookBorrowCount = {};
             allBorrows.forEach(borrow => {
                 const title = borrow.book_title;
@@ -125,7 +121,6 @@ const Dashboard = () => {
                     count 
                 }));
 
-            // Students by Class
             const classCount = {};
             students.forEach(student => {
                 classCount[student.class] = (classCount[student.class] || 0) + 1;
@@ -133,7 +128,6 @@ const Dashboard = () => {
             const studentsByClass = Object.entries(classCount)
                 .map(([className, count]) => ({ className, count }));
 
-            // Recent Activities
             const recentActivities = allBorrows.slice(0, 5).map(borrow => ({
                 id: borrow.borrow_id,
                 student: borrow.student_name || 'Unknown',
@@ -162,18 +156,16 @@ const Dashboard = () => {
         }
     };
 
-    // Chart Data Configurations
+    // Chart configurations
     const authorChartData = {
-        labels: stats.booksByAuthor.map(item => 
-            item.author.length > 20 ? item.author.substring(0, 20) + '...' : item.author
-        ),
+        labels: stats.booksByAuthor.map(item => item.author.length > 20 ? item.author.substring(0, 20) + '...' : item.author),
         datasets: [{
             label: 'Number of Books',
             data: stats.booksByAuthor.map(item => item.count),
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(99, 102, 241, 0.6)',
+            borderColor: 'rgba(99, 102, 241, 1)',
             borderWidth: 1,
-            borderRadius: 5,
+            borderRadius: 8,
         }]
     };
 
@@ -182,13 +174,15 @@ const Dashboard = () => {
         datasets: [{
             label: 'Books Borrowed',
             data: stats.monthlyBorrowing.map(item => item.count),
-            borderColor: 'rgb(75, 192, 192)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderWidth: 2,
+            borderColor: 'rgba(16, 185, 129, 1)',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 3,
             tension: 0.4,
             fill: true,
-            pointRadius: 4,
-            pointHoverRadius: 6,
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+            pointBorderColor: '#ffffff',
         }]
     };
 
@@ -196,15 +190,9 @@ const Dashboard = () => {
         labels: ['Available Books', 'Borrowed Books'],
         datasets: [{
             data: [stats.availableBooks, stats.borrowedBooks],
-            backgroundColor: [
-                'rgba(75, 192, 192, 0.8)',
-                'rgba(255, 99, 132, 0.8)',
-            ],
-            borderColor: [
-                'rgba(75, 192, 192, 1)',
-                'rgba(255, 99, 132, 1)',
-            ],
-            borderWidth: 1,
+            backgroundColor: ['rgba(16, 185, 129, 0.8)', 'rgba(245, 158, 11, 0.8)'],
+            borderColor: ['rgba(16, 185, 129, 1)', 'rgba(245, 158, 11, 1)'],
+            borderWidth: 2,
         }]
     };
 
@@ -213,10 +201,10 @@ const Dashboard = () => {
         datasets: [{
             label: 'Times Borrowed',
             data: stats.popularBooks.map(item => item.count),
-            backgroundColor: 'rgba(255, 159, 64, 0.6)',
-            borderColor: 'rgba(255, 159, 64, 1)',
+            backgroundColor: 'rgba(245, 158, 11, 0.6)',
+            borderColor: 'rgba(245, 158, 11, 1)',
             borderWidth: 1,
-            borderRadius: 5,
+            borderRadius: 8,
         }]
     };
 
@@ -225,14 +213,14 @@ const Dashboard = () => {
         datasets: [{
             data: stats.studentsByClass.map(item => item.count),
             backgroundColor: [
-                'rgba(255, 99, 132, 0.8)',
-                'rgba(54, 162, 235, 0.8)',
-                'rgba(255, 206, 86, 0.8)',
-                'rgba(75, 192, 192, 0.8)',
-                'rgba(153, 102, 255, 0.8)',
-                'rgba(255, 159, 64, 0.8)',
+                'rgba(99, 102, 241, 0.8)',
+                'rgba(16, 185, 129, 0.8)',
+                'rgba(245, 158, 11, 0.8)',
+                'rgba(239, 68, 68, 0.8)',
+                'rgba(139, 92, 246, 0.8)',
             ],
-            borderWidth: 1,
+            borderWidth: 2,
+            borderColor: '#ffffff',
         }]
     };
 
@@ -242,12 +230,29 @@ const Dashboard = () => {
         plugins: {
             legend: {
                 position: 'top',
-                labels: { font: { size: 11 } }
+                labels: { 
+                    font: { size: 12, weight: '500' },
+                    usePointStyle: true,
+                }
             },
-            tooltip: { mode: 'index', intersect: false }
+            tooltip: { 
+                mode: 'index', 
+                intersect: false,
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
+                titleFont: { size: 13 },
+                bodyFont: { size: 12 },
+            }
         },
         scales: {
-            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            y: { 
+                beginAtZero: true, 
+                ticks: { stepSize: 1 },
+                grid: { color: 'rgba(0, 0, 0, 0.05)' }
+            },
+            x: { 
+                grid: { display: false }
+            }
         }
     };
 
@@ -255,7 +260,11 @@ const Dashboard = () => {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            legend: { position: 'bottom', labels: { font: { size: 11 } } }
+            legend: { 
+                position: 'bottom', 
+                labels: { font: { size: 11, weight: '500' } }
+            },
+            tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)' }
         }
     };
 
@@ -265,39 +274,45 @@ const Dashboard = () => {
             value: stats.totalBooks,
             subtitle: `${stats.totalBookCopies} copies`,
             icon: '📚',
-            color: '#4CAF50',
-            bgColor: '#E8F5E9'
+            iconBg: '#EEF2FF',
+            iconColor: '#6366F1',
+            gradient: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)'
         },
         {
             title: 'Available Books',
             value: stats.availableBooks,
             subtitle: `${Math.round((stats.availableBooks / stats.totalBookCopies) * 100) || 0}% available`,
             icon: '📖',
-            color: '#2196F3',
-            bgColor: '#E3F2FD'
+            iconBg: '#ECFDF5',
+            iconColor: '#10B981',
+            gradient: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)'
         },
         {
             title: 'Borrowed Books',
             value: stats.borrowedBooks,
             subtitle: `${stats.borrowedBooks} currently out`,
             icon: '📕',
-            color: '#FF9800',
-            bgColor: '#FFF3E0'
+            iconBg: '#FFFBEB',
+            iconColor: '#F59E0B',
+            gradient: 'linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%)'
         },
         {
             title: 'Total Students',
             value: stats.totalStudents,
             subtitle: `${stats.studentsByClass.length} classes`,
             icon: '👨‍🎓',
-            color: '#9C27B0',
-            bgColor: '#F3E5F5'
+            iconBg: '#F5F3FF',
+            iconColor: '#8B5CF6',
+            gradient: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)'
         }
     ];
 
     if (loading) {
         return (
             <div className="dashboard">
-                <h1>Library Dashboard</h1>
+                <h1 style={{ background: 'linear-gradient(135deg, #6366F1, #8B5CF6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    Library Dashboard
+                </h1>
                 <div className="loading-container">
                     <div className="loading-spinner"></div>
                     <p>Loading dashboard data...</p>
@@ -308,18 +323,26 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
-            <h1>📊 Library Dashboard</h1>
+            <div className="dashboard-header">
+                <h1 className="dashboard-title">
+                    <span className="title-icon">🤖</span>
+                    AI-Powered Library Dashboard
+                </h1>
+                <p className="dashboard-subtitle">Real-time analytics & insights</p>
+            </div>
             
             {/* Summary Cards */}
             <div className="summary-cards">
                 {summaryCards.map((card, index) => (
-                    <div key={index} className="summary-card" style={{ backgroundColor: card.bgColor }}>
-                        <div className="card-icon" style={{ color: card.color }}>
-                            {card.icon}
+                    <div key={index} className="summary-card" style={{ background: card.gradient }}>
+                        <div className="card-icon-wrapper" style={{ background: card.iconBg }}>
+                            <div className="card-icon" style={{ color: card.iconColor }}>
+                                {card.icon}
+                            </div>
                         </div>
                         <div className="card-content">
                             <h3>{card.title}</h3>
-                            <p className="card-value" style={{ color: card.color }}>{card.value}</p>
+                            <p className="card-value">{card.value}</p>
                             <p className="card-subtitle">{card.subtitle}</p>
                         </div>
                     </div>
@@ -332,7 +355,9 @@ const Dashboard = () => {
                 {stats.booksByAuthor.length > 0 && (
                     <div className="chart-card">
                         <div className="chart-header">
-                            <h3>Books by Author</h3>
+                            <div className="chart-icon">📊</div>
+                            <h3>Books Distribution by Author</h3>
+                            <p className="chart-subtitle">Top authors by book count</p>
                         </div>
                         <div className="chart-container">
                             <Bar data={authorChartData} options={chartOptions} />
@@ -343,6 +368,7 @@ const Dashboard = () => {
                 {/* Monthly Borrowing Trend */}
                 <div className="chart-card">
                     <div className="chart-header">
+                        <div className="chart-icon">📈</div>
                         <h3>Monthly Borrowing Trend</h3>
                         <p className="chart-subtitle">Last 6 months activity</p>
                     </div>
@@ -354,7 +380,9 @@ const Dashboard = () => {
                 {/* Book Availability Doughnut */}
                 <div className="chart-card">
                     <div className="chart-header">
-                        <h3>Book Availability</h3>
+                        <div className="chart-icon">🍩</div>
+                        <h3>Book Availability Status</h3>
+                        <p className="chart-subtitle">Available vs Borrowed</p>
                     </div>
                     <div className="chart-container small-chart">
                         <Doughnut data={availabilityChartData} options={pieOptions} />
@@ -365,6 +393,7 @@ const Dashboard = () => {
                 {stats.popularBooks.length > 0 && (
                     <div className="chart-card">
                         <div className="chart-header">
+                            <div className="chart-icon">⭐</div>
                             <h3>Most Popular Books</h3>
                             <p className="chart-subtitle">Top 5 most borrowed</p>
                         </div>
@@ -378,7 +407,9 @@ const Dashboard = () => {
                 {stats.studentsByClass.length > 0 && (
                     <div className="chart-card">
                         <div className="chart-header">
-                            <h3>Students by Class</h3>
+                            <div className="chart-icon">🎓</div>
+                            <h3>Student Distribution</h3>
+                            <p className="chart-subtitle">Students by class</p>
                         </div>
                         <div className="chart-container small-chart">
                             <Pie data={classChartData} options={pieOptions} />
@@ -389,6 +420,7 @@ const Dashboard = () => {
                 {/* Recent Activities */}
                 <div className="chart-card activities-card">
                     <div className="chart-header">
+                        <div className="chart-icon">🔄</div>
                         <h3>Recent Activities</h3>
                         <p className="chart-subtitle">Latest borrow transactions</p>
                     </div>
