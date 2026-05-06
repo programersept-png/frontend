@@ -13,6 +13,20 @@ import {
     LineElement
 } from 'chart.js';
 import { Bar, Pie, Line, Doughnut } from 'react-chartjs-2';
+import { 
+    BookOpen, 
+    BookMarked, 
+    BookCopy, 
+    Users,
+    TrendingUp,
+    Star,
+    GraduationCap,
+    Activity,
+    BarChart3,
+    PieChart as PieChartIcon,
+    LineChart,
+    RefreshCw
+} from 'lucide-react';
 
 // Register ChartJS components
 ChartJS.register(
@@ -273,7 +287,7 @@ const Dashboard = () => {
             title: 'Total Books',
             value: stats.totalBooks,
             subtitle: `${stats.totalBookCopies} copies`,
-            icon: '📚',
+            icon: BookOpen,
             iconBg: '#EEF2FF',
             iconColor: '#6366F1',
             gradient: 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)'
@@ -282,7 +296,7 @@ const Dashboard = () => {
             title: 'Available Books',
             value: stats.availableBooks,
             subtitle: `${Math.round((stats.availableBooks / stats.totalBookCopies) * 100) || 0}% available`,
-            icon: '📖',
+            icon: BookMarked,
             iconBg: '#ECFDF5',
             iconColor: '#10B981',
             gradient: 'linear-gradient(135deg, #10B981 0%, #34D399 100%)'
@@ -291,7 +305,7 @@ const Dashboard = () => {
             title: 'Borrowed Books',
             value: stats.borrowedBooks,
             subtitle: `${stats.borrowedBooks} currently out`,
-            icon: '📕',
+            icon: BookCopy,
             iconBg: '#FFFBEB',
             iconColor: '#F59E0B',
             gradient: 'linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%)'
@@ -300,7 +314,7 @@ const Dashboard = () => {
             title: 'Total Students',
             value: stats.totalStudents,
             subtitle: `${stats.studentsByClass.length} classes`,
-            icon: '👨‍🎓',
+            icon: Users,
             iconBg: '#F5F3FF',
             iconColor: '#8B5CF6',
             gradient: 'linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)'
@@ -325,7 +339,7 @@ const Dashboard = () => {
         <div className="dashboard">
             <div className="dashboard-header">
                 <h1 className="dashboard-title">
-                    <span className="title-icon">🤖</span>
+                    <BarChart3 className="title-icon" size={32} />
                     AI-Powered Library Dashboard
                 </h1>
                 <p className="dashboard-subtitle">Real-time analytics & insights</p>
@@ -336,9 +350,7 @@ const Dashboard = () => {
                 {summaryCards.map((card, index) => (
                     <div key={index} className="summary-card" style={{ background: card.gradient }}>
                         <div className="card-icon-wrapper" style={{ background: card.iconBg }}>
-                            <div className="card-icon" style={{ color: card.iconColor }}>
-                                {card.icon}
-                            </div>
+                            <card.icon className="card-icon" size={32} style={{ color: card.iconColor }} />
                         </div>
                         <div className="card-content">
                             <h3>{card.title}</h3>
@@ -355,7 +367,7 @@ const Dashboard = () => {
                 {stats.booksByAuthor.length > 0 && (
                     <div className="chart-card">
                         <div className="chart-header">
-                            <div className="chart-icon">📊</div>
+                            <BarChart3 className="chart-icon" size={24} />
                             <h3>Books Distribution by Author</h3>
                             <p className="chart-subtitle">Top authors by book count</p>
                         </div>
@@ -368,7 +380,7 @@ const Dashboard = () => {
                 {/* Monthly Borrowing Trend */}
                 <div className="chart-card">
                     <div className="chart-header">
-                        <div className="chart-icon">📈</div>
+                        <LineChart className="chart-icon" size={24} />
                         <h3>Monthly Borrowing Trend</h3>
                         <p className="chart-subtitle">Last 6 months activity</p>
                     </div>
@@ -380,7 +392,7 @@ const Dashboard = () => {
                 {/* Book Availability Doughnut */}
                 <div className="chart-card">
                     <div className="chart-header">
-                        <div className="chart-icon">🍩</div>
+                        <PieChartIcon className="chart-icon" size={24} />
                         <h3>Book Availability Status</h3>
                         <p className="chart-subtitle">Available vs Borrowed</p>
                     </div>
@@ -393,7 +405,7 @@ const Dashboard = () => {
                 {stats.popularBooks.length > 0 && (
                     <div className="chart-card">
                         <div className="chart-header">
-                            <div className="chart-icon">⭐</div>
+                            <Star className="chart-icon" size={24} />
                             <h3>Most Popular Books</h3>
                             <p className="chart-subtitle">Top 5 most borrowed</p>
                         </div>
@@ -407,7 +419,7 @@ const Dashboard = () => {
                 {stats.studentsByClass.length > 0 && (
                     <div className="chart-card">
                         <div className="chart-header">
-                            <div className="chart-icon">🎓</div>
+                            <GraduationCap className="chart-icon" size={24} />
                             <h3>Student Distribution</h3>
                             <p className="chart-subtitle">Students by class</p>
                         </div>
@@ -420,7 +432,7 @@ const Dashboard = () => {
                 {/* Recent Activities */}
                 <div className="chart-card activities-card">
                     <div className="chart-header">
-                        <div className="chart-icon">🔄</div>
+                        <Activity className="chart-icon" size={24} />
                         <h3>Recent Activities</h3>
                         <p className="chart-subtitle">Latest borrow transactions</p>
                     </div>
@@ -429,7 +441,7 @@ const Dashboard = () => {
                             stats.recentActivities.map((activity, index) => (
                                 <div key={index} className="activity-item">
                                     <div className="activity-icon">
-                                        {activity.status === 'borrowed' ? '📕' : '✅'}
+                                        {activity.status === 'borrowed' ? <BookCopy size={20} /> : <RefreshCw size={20} />}
                                     </div>
                                     <div className="activity-details">
                                         <p className="activity-text">
