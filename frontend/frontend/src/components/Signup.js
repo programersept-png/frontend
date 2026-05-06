@@ -6,7 +6,6 @@ const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
-    email: '',
     password: '',
     confirmPassword: '',
     fullName: ''
@@ -35,16 +34,10 @@ const Signup = () => {
       newErrors.username = 'Username must be at least 3 characters';
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    } else if (formData.password.length < 4) {
+      newErrors.password = 'Password must be at least 4 characters';
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -69,7 +62,6 @@ const Signup = () => {
       const response = await API.post('/api/auth/signup', {
         username: formData.username,
         password: formData.password,
-        email: formData.email,
         fullName: formData.fullName
       });
 
@@ -110,7 +102,7 @@ const Signup = () => {
             <input
               type="text"
               name="fullName"
-              placeholder="John Doe"
+              placeholder="Enter your full name"
               value={formData.fullName}
               onChange={handleChange}
             />
@@ -121,7 +113,7 @@ const Signup = () => {
             <input
               type="text"
               name="username"
-              placeholder="Choose a username"
+              placeholder="Choose a username (min 3 characters)"
               value={formData.username}
               onChange={handleChange}
               required
@@ -130,24 +122,11 @@ const Signup = () => {
           </div>
 
           <div className="form-group">
-            <label>Email *</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="your@email.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            {errors.email && <span className="field-error">{errors.email}</span>}
-          </div>
-
-          <div className="form-group">
             <label>Password *</label>
             <input
               type="password"
               name="password"
-              placeholder="At least 6 characters"
+              placeholder="Choose a password (min 4 characters)"
               value={formData.password}
               onChange={handleChange}
               required
