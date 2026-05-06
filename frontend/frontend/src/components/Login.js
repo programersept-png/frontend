@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import API from '../api';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, onSwitchToSignup }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -71,6 +71,8 @@ const Login = ({ onLogin }) => {
           <p>🔐 Default credentials:</p>
           <p><strong>Username:</strong> admin</p>
           <p><strong>Password:</strong> admin123</p>
+          <hr />
+          <p>Don't have an account? <button className="link-button" onClick={onSwitchToSignup}>Sign up</button></p>
         </div>
       </div>
     </div>
