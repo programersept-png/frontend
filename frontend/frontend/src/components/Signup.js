@@ -7,8 +7,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    confirmPassword: '',
-    fullName: ''
+    confirmPassword: ''
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -61,8 +60,7 @@ const Signup = () => {
     try {
       const response = await API.post('/api/auth/signup', {
         username: formData.username,
-        password: formData.password,
-        fullName: formData.fullName
+        password: formData.password
       });
 
       if (response.data.success) {
@@ -97,17 +95,6 @@ const Signup = () => {
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Full Name (Optional)</label>
-            <input
-              type="text"
-              name="fullName"
-              placeholder="Enter your full name"
-              value={formData.fullName}
-              onChange={handleChange}
-            />
-          </div>
-
           <div className="form-group">
             <label>Username *</label>
             <input
