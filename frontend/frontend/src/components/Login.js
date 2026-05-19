@@ -1,36 +1,129 @@
-/* Add to App.css - Make login container fixed and non-scrollable */
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  height: 100vh;
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #10B981 100%);
-  margin: 0;
-  padding: 0;
-}
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import API from '../api';
+import { LogIn, User, Lock, BookOpen } from 'lucide-react';
 
-.login-box {
-  background: white;
-  padding: 2rem;
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-  animation: fadeInUp 0.5s ease-out;
-}
+const Login = ({ onLogin }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-/* Remove body scroll when login is active */
-body.login-active {
-  overflow: hidden;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-}
+  // Prevent body scroll when component mounts
+  useEffect(() => {
+    document.body.classList.add('login-active');
+    return () => {
+      document.body.classList.remove('login-active');
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await API.post('/api/auth/login', {
+        username,
+        password
+      });
+
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('username', response.data.username);
+        localStorage.setItem('user_id', response.data.user_id);
+        localStorage.setItem('role', response.data.role);
+        
+        if (onLogin) {
+          onLogin();
+        }
+        
+        navigate('/dashboard');
+      } else {
+        setError('Invalid response from server');
+      }
+
+    } catch (err) {
+      console.error('Login error:', err);
+      if (err.response) {
+        setError(err.response.data.error || 'Login failed. Please try again.');
+      } else if (err.request) {
+        setError('Cannot connect to server. Please check your connection.');
+      } else {
+        setError('An error occurred. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <div className="login-box">
+        <div className="login-header">
+          <div className="login-logo">
+            <BookOpen size={48} className="logo-icon" />
+          </div>
+          <h2>Library Management System</h2>
+          <h3>Welcome Back!</h3>
+        </div>
+
+        {error && <div className="error">{error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>
+              <User size={16} />
+              Username
+            </label>
+            <input
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              autoFocus
+            />
+          </div>
+
+          <div className="form-group">
+            <label>
+              <Lock size={16} />
+              Password
+            </label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button type="submit" disabled={loading} className="login-btn">
+            {loading ? (
+              <>
+                <span className="spinner-small"></span>
+                Logging in...
+              </>
+            ) : (
+              <>
+                <LogIn size={18} />
+                Login
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="login-footer">
+          <div className="signup-link">
+            <p>Don't have an account? <Link to="/signup">Create one here</Link></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
