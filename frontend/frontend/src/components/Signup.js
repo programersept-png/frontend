@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import API from '../api';
+import { User, Lock, Mail, UserPlus, BookOpen } from 'lucide-react';
 
 const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
+    email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    fullName: ''
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -33,10 +36,16 @@ const Signup = () => {
       newErrors.username = 'Username must be at least 3 characters';
     }
 
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 4) {
-      newErrors.password = 'Password must be at least 4 characters';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -60,7 +69,9 @@ const Signup = () => {
     try {
       const response = await API.post('/api/auth/signup', {
         username: formData.username,
-        password: formData.password
+        password: formData.password,
+        email: formData.email,
+        fullName: formData.fullName
       });
 
       if (response.data.success) {
@@ -81,10 +92,15 @@ const Signup = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box signup-box">
-        <h2>📚 Create Account</h2>
-        <h3>Join the Library Management System</h3>
+    <div className="signup-container">
+      <div className="signup-box">
+        <div className="login-header">
+          <div className="login-logo">
+            <BookOpen size={48} className="logo-icon" />
+          </div>
+          <h2>Create Account</h2>
+          <h3>Join the Library Management System</h3>
+        </div>
 
         {successMessage && (
           <div className="success-message">{successMessage}</div>
@@ -96,11 +112,25 @@ const Signup = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Username *</label>
+            <label>Full Name (Optional)</label>
+            <input
+              type="text"
+              name="fullName"
+              placeholder="Enter your full name"
+              value={formData.fullName}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>
+              <User size={16} />
+              Username *
+            </label>
             <input
               type="text"
               name="username"
-              placeholder="Choose a username (min 3 characters)"
+              placeholder="Choose a username"
               value={formData.username}
               onChange={handleChange}
               required
@@ -109,11 +139,30 @@ const Signup = () => {
           </div>
 
           <div className="form-group">
-            <label>Password *</label>
+            <label>
+              <Mail size={16} />
+              Email *
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="your@email.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            {errors.email && <span className="field-error">{errors.email}</span>}
+          </div>
+
+          <div className="form-group">
+            <label>
+              <Lock size={16} />
+              Password *
+            </label>
             <input
               type="password"
               name="password"
-              placeholder="Choose a password (min 4 characters)"
+              placeholder="Minimum 6 characters"
               value={formData.password}
               onChange={handleChange}
               required
@@ -122,7 +171,10 @@ const Signup = () => {
           </div>
 
           <div className="form-group">
-            <label>Confirm Password *</label>
+            <label>
+              <Lock size={16} />
+              Confirm Password *
+            </label>
             <input
               type="password"
               name="confirmPassword"
@@ -134,16 +186,25 @@ const Signup = () => {
             {errors.confirmPassword && <span className="field-error">{errors.confirmPassword}</span>}
           </div>
 
-          <button type="submit" disabled={loading}>
-            {loading ? 'Creating Account...' : 'Sign Up'}
+          <button type="submit" disabled={loading} className="login-btn">
+            {loading ? (
+              <>
+                <span className="spinner-small"></span>
+                Creating Account...
+              </>
+            ) : (
+              <>
+                <UserPlus size={18} />
+                Sign Up
+              </>
+            )}
           </button>
         </form>
 
-        <div className="info">
-          <p>Already have an account?</p>
-          <Link to="/login">
-            <button className="switch-button">Login here</button>
-          </Link>
+        <div className="login-footer">
+          <div className="signup-link">
+            <p>Already have an account? <Link to="/login">Login here</Link></p>
+          </div>
         </div>
       </div>
     </div>
