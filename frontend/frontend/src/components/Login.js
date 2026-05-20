@@ -12,8 +12,32 @@ const Login = ({ onLogin }) => {
 
   // Prevent body scroll when component mounts
   useEffect(() => {
+    // Save original styles
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    
+    // Disable scroll on body
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = '0';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.bottom = '0';
+    document.body.style.width = '100%';
+    document.body.style.height = '100%';
+    
+    // Add class for additional styling
     document.body.classList.add('login-active');
+    
+    // Cleanup on unmount
     return () => {
+      document.body.style.overflow = originalStyle;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.bottom = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
       document.body.classList.remove('login-active');
     };
   }, []);
