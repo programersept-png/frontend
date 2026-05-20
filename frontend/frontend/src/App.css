@@ -1387,3 +1387,57 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   background: #c4b5fd;
   color: #4c1d95;
 }
+
+/* Remove blue highlight on all elements globally */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Remove blue focus outline on all buttons and inputs */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+a:focus {
+  outline: none !important;
+}
+
+/* Style scrollbar to be purple instead of blue */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8b5cf6;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed;
+}
+
+/* Remove blue highlight from select dropdowns */
+select:focus {
+  outline: none;
+  border-color: #8b5cf6;
+}
+
+/* Remove blue from number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 0.5;
+}
+
+/* Remove blue highlight on mobile touch */
+@media (max-width: 768px) {
+  input, button, a, div {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
