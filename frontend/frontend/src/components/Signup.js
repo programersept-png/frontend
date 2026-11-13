@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import API from '../api';
-import { User, Lock, Mail, UserPlus, BookOpen } from 'lucide-react';
+import { User, Lock, Mail } from 'lucide-react';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -60,9 +60,7 @@ const Signup = () => {
     e.preventDefault();
     setSuccessMessage('');
     
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setLoading(true);
 
@@ -92,120 +90,114 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup-container">
-      <div className="signup-box">
-        <div className="login-header">
-          <div className="login-logo">
-            <BookOpen size={48} className="logo-icon" />
-          </div>
-          <h2>Create Account</h2>
-          <h3>Join the Library Management System</h3>
+    <div className="custom-login-wrapper">
+      <div className="custom-login-box">
+        
+        <div className="login-header" style={{ marginBottom: '20px' }}>
+          <h2 style={{ color: 'white', fontSize: '24px', margin: '0 0 5px 0' }}>Create Account</h2>
+          <p style={{ color: '#b0b0b0', fontSize: '12px' }}>Join the Library System</p>
         </div>
 
         {successMessage && (
-          <div className="success-message">{successMessage}</div>
+          <div className="custom-success">{successMessage}</div>
         )}
 
         {errors.submit && (
-          <div className="error">{errors.submit}</div>
+          <div className="custom-error">{errors.submit}</div>
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Full Name (Optional)</label>
+          {/* Full Name */}
+          <div className="custom-input-group">
+            <div className="custom-icon-box">
+              <User size={20} color="#333" />
+            </div>
             <input
               type="text"
               name="fullName"
-              placeholder="Enter your full name"
+              placeholder="Full Name (Optional)"
               value={formData.fullName}
               onChange={handleChange}
             />
           </div>
 
-          <div className="form-group">
-            <label>
-              <User size={16} />
-              Username *
-            </label>
+          {/* Username */}
+          <div className="custom-input-group">
+            <div className="custom-icon-box">
+              <User size={20} color="#333" />
+            </div>
             <input
               type="text"
               name="username"
-              placeholder="Choose a username"
+              placeholder="Username"
               value={formData.username}
               onChange={handleChange}
               required
             />
-            {errors.username && <span className="field-error">{errors.username}</span>}
           </div>
+          {errors.username && <span className="custom-field-error">{errors.username}</span>}
 
-          <div className="form-group">
-            <label>
-              <Mail size={16} />
-              Email *
-            </label>
+          {/* Email */}
+          <div className="custom-input-group">
+            <div className="custom-icon-box">
+              <Mail size={20} color="#333" />
+            </div>
             <input
               type="email"
               name="email"
-              placeholder="your@email.com"
+              placeholder="Email"
               value={formData.email}
               onChange={handleChange}
               required
             />
-            {errors.email && <span className="field-error">{errors.email}</span>}
           </div>
+          {errors.email && <span className="custom-field-error">{errors.email}</span>}
 
-          <div className="form-group">
-            <label>
-              <Lock size={16} />
-              Password *
-            </label>
+          {/* Password */}
+          <div className="custom-input-group">
+            <div className="custom-icon-box">
+              <Lock size={20} color="#333" />
+            </div>
             <input
               type="password"
               name="password"
-              placeholder="Minimum 6 characters"
+              placeholder="Password"
               value={formData.password}
               onChange={handleChange}
               required
             />
-            {errors.password && <span className="field-error">{errors.password}</span>}
           </div>
+          {errors.password && <span className="custom-field-error">{errors.password}</span>}
 
-          <div className="form-group">
-            <label>
-              <Lock size={16} />
-              Confirm Password *
-            </label>
+          {/* Confirm Password */}
+          <div className="custom-input-group">
+            <div className="custom-icon-box">
+              <Lock size={20} color="#333" />
+            </div>
             <input
               type="password"
               name="confirmPassword"
-              placeholder="Re-enter your password"
+              placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
-            {errors.confirmPassword && <span className="field-error">{errors.confirmPassword}</span>}
           </div>
+          {errors.confirmPassword && <span className="custom-field-error">{errors.confirmPassword}</span>}
 
-          <button type="submit" disabled={loading} className="login-btn">
-            {loading ? (
-              <>
-                <span className="spinner-small"></span>
-                Creating Account...
-              </>
-            ) : (
-              <>
-                <UserPlus size={18} />
-                Sign Up
-              </>
-            )}
+          {/* Sign Up Button */}
+          <button type="submit" disabled={loading} className="custom-login-btn" style={{ marginTop: '10px' }}>
+            {loading ? 'CREATING...' : 'SIGN UP'}
           </button>
         </form>
 
-        <div className="login-footer">
-          <div className="signup-link">
-            <p>Already have an account? <Link to="/login">Login here</Link></p>
-          </div>
-        </div>
+        {/* Login Button */}
+        <Link to="/login" style={{ textDecoration: 'none' }}>
+          <button type="button" className="custom-register-btn">
+            LOGIN
+          </button>
+        </Link>
+
       </div>
     </div>
   );

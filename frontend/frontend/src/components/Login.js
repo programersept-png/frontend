@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import API from '../api';
-import { LogIn, User, Lock, BookOpen } from 'lucide-react';
+import { User, Lock } from 'lucide-react';
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -12,11 +12,9 @@ const Login = ({ onLogin }) => {
 
   // Prevent body scroll when component mounts
   useEffect(() => {
-    // Save original styles
     const originalOverflow = document.body.style.overflow;
     const originalPosition = document.body.style.position;
     
-    // Disable scroll on body
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
@@ -26,10 +24,8 @@ const Login = ({ onLogin }) => {
     document.body.style.right = '0';
     document.body.style.bottom = '0';
     
-    // Add class for additional styling
     document.body.classList.add('login-active');
     
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = originalOverflow;
       document.body.style.position = originalPosition;
@@ -84,27 +80,20 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <div className="login-header">
-          <div className="login-logo">
-            <BookOpen size={48} className="logo-icon" />
-          </div>
-          <h2>Library Management System</h2>
-          <h3>Welcome Back!</h3>
-        </div>
-
-        {error && <div className="error">{error}</div>}
+    <div className="custom-login-wrapper">
+      <div className="custom-login-box">
+        
+        {error && <div className="custom-error">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>
-              <User size={16} />
-              Username
-            </label>
+          {/* Username Input */}
+          <div className="custom-input-group">
+            <div className="custom-icon-box">
+              <User size={20} color="#333" />
+            </div>
             <input
               type="text"
-              placeholder="Enter your username"
+              placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -112,40 +101,43 @@ const Login = ({ onLogin }) => {
             />
           </div>
 
-          <div className="form-group">
-            <label>
-              <Lock size={16} />
-              Password
-            </label>
+          {/* Password Input */}
+          <div className="custom-input-group">
+            <div className="custom-icon-box">
+              <Lock size={20} color="#333" />
+            </div>
             <input
               type="password"
-              placeholder="Enter your password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
 
-          <button type="submit" disabled={loading} className="login-btn">
-            {loading ? (
-              <>
-                <span className="spinner-small"></span>
-                Logging in...
-              </>
-            ) : (
-              <>
-                <LogIn size={18} />
-                Login
-              </>
-            )}
+          {/* Remember Me & Forgot Password */}
+          <div className="custom-options">
+            <label className="custom-remember">
+              <input type="checkbox" /> Remember Me
+            </label>
+            <Link to="/forgot-password" className="custom-forgot">
+              Forgot Password?
+            </Link>
+          </div>
+
+          {/* Login Button */}
+          <button type="submit" disabled={loading} className="custom-login-btn">
+            {loading ? 'LOGGING IN...' : 'LOGIN'}
           </button>
         </form>
 
-        <div className="login-footer">
-          <div className="signup-link">
-            <p>Don't have an account? <Link to="/signup">Create one here</Link></p>
-          </div>
-        </div>
+        {/* Register Button */}
+        <Link to="/signup" style={{ textDecoration: 'none' }}>
+          <button type="button" className="custom-register-btn">
+            REGISTER
+          </button>
+        </Link>
+
       </div>
     </div>
   );
